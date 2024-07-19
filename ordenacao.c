@@ -76,11 +76,11 @@ void preencherVetorAleatorio(int vetor[], size_t tam) {
     srand((unsigned int)time(NULL));
     
     for (size_t i = 0; i < tam; i++) {
-        vetor[i] = rand() % tam; // gera valores entre 0 e MAX_VAL
+        vetor[i] = rand() % tam; // gera valores apartir do tamanho do
     }
 }
 
-//===============Imprimir Vetor ============
+//===============Imprimir Vetor =====================================================
 void imprimeVetor(int vetor[], int tam) {
     if (tam <= 0) {
         printf("[]\n");
@@ -116,7 +116,7 @@ void imprimeVetor(int vetor[], int tam) {
     printf(" ]\n");
 }
 
-//===============Merge Sort Recursivo =============================================
+//===============Merge Sort Recursivo ===============================================
 uint64_t mergeSort(int vetor[], size_t tam) {
     if (tam <= 0) {
         return 0;
@@ -197,37 +197,71 @@ void copiar(int vetor[],size_t inicio, size_t fim, int vetor_u[]){
     } 
 }
 
-uint64_t quickSort(int vetor[], size_t tam) {
-    vetor[0] = 99;
-    return -1;
+//===============================Quick Sort Recursivo=================================
+uint64_t particionar(int vetor[], int a, int b, int* m) {
+    int x = vetor[b]; // pivô
+    int i, j = a;
+    uint64_t comparacoes = 0;
+
+    for (i = a; i < b; i++) {
+        comparacoes++;
+        if (vetor[i] <= x) {
+            trocar(&vetor[i], &vetor[j]);
+            j++;
+        }
+    }
+
+    trocar(&vetor[j], &vetor[b]);
+    *m = j;
+
+    return comparacoes;
 }
 
+//função recursiva
+uint64_t quickSortRec(int vetor[], int a, int b) {
+    if (a >= b) return 0;
+
+    int m;
+    uint64_t comparacoes = particionar(vetor, a, b, &m);
+
+    comparacoes += quickSortRec(vetor, a, m - 1);
+    comparacoes += quickSortRec(vetor, m + 1, b);
+
+    return comparacoes;
+}
+
+// função principal 
+uint64_t quickSort(int vetor[], size_t tam) {
+    return quickSortRec(vetor, 0, tam - 1);
+}
+
+//================================Heap Sort Recursivo================================
 uint64_t max_heapify(int h[], int i, int n) {
-    int l = 2 * i;     // filho esquerdo
-    int r = 2 * i + 1; // filho direito
+    int l = 2 * i + 1;     // Índice do filho esquerdo
+    int r = 2 * i + 2; // Índice do filho direito
     int maior = i;
     uint64_t comparacoes = 0;
 
-    // verifica se o filho esquerdo é maior que o pai
-    if (l <= n) {
+    // Verifica se o filho esquerdo é maior que o pai
+    if (l < n) {
         comparacoes++;
         if (h[l] > h[i]) {
             maior = l;
         }
     }
 
-    // verifica se o filho direito é maior que o maior até agora
-    if (r <= n) {
+    // Verifica se o filho direito é maior que o maior até agora
+    if (r < n) {
         comparacoes++;
         if (h[r] > h[maior]) {
             maior = r;
         }
     }
 
-    // se o maior não for o pai, troca e aplica heapify recursivamente
+    // Se o maior não for o pai, troca e aplica heapify recursivamente
     if (maior != i) {
         trocar(&h[i], &h[maior]);
-        comparacoes += max_heapify(h, maior, n); 
+        comparacoes += max_heapify(h, maior, n); // Contagem de comparações recursivas
     }
 
     return comparacoes;
@@ -236,7 +270,7 @@ uint64_t max_heapify(int h[], int i, int n) {
 // função para construir um max-heap
 uint64_t construir_max_heap(int v[], int n) {
     uint64_t comparacoes = 0;
-    for (int i = n / 2; i >= 1; i--) {
+    for (int i = (n / 2) - 1; i >= 0; i--) {
         comparacoes += max_heapify(v, i, n);
     }
     return comparacoes;
@@ -249,26 +283,72 @@ uint64_t heapSort(int v[], size_t tam) {
 
     comparacoes += construir_max_heap(v, n);
 
-    for (int i = n; i >= 2; i--) {
-        trocar(&v[1], &v[i]);  // move o maior elemento para o final
-        comparacoes += max_heapify(v, 1, i - 1); // reajusta o heap
+    for (int i = n - 1; i > 0; i--) {
+        trocar(&v[0], &v[i]);  // Move o maior elemento para o final
+        comparacoes += max_heapify(v, 0, i); // Reajusta o heap
     }
 
     return comparacoes;
 }
 
-
+//=================================Quick Sort Iterativo==============================
 uint64_t quickSortSR(int vetor[], size_t tam) {
     vetor[0] = 99;
     return -1;
 }
 
-uint64_t heapSortSR(int vetor[], size_t tam) {
-    vetor[0] = 99;
-    return -1;
+
+//================================Heap Sort Iterativo================================
+uint64_t buildMaxHeap(int arr[], int n) {
+    uint64_t comparacoes = 0;
+    
+    for (int i = 1; i < n; i++) {
+        comparacoes++;
+        if (arr[i] > arr[(i - 1) / 2]) {
+            int j = i;
+            while (arr[j] > arr[(j - 1) / 2]) {
+                trocar(&arr[j], &arr[(j - 1) / 2]);
+                j = (j - 1) / 2;
+                comparacoes++;
+            }
+        }
+    }
+    
+    return comparacoes;
 }
 
-//==============================Merge Sort Iterativo============================== 
+uint64_t heapSortSR(int arr[], size_t n) {
+    uint64_t comparacoes = buildMaxHeap(arr, n);
+    
+    for (int i = n - 1; i > 0; i--) {
+        trocar(&arr[0], &arr[i]);
+        
+        int j = 0, index;
+        do {
+            index = (2 * j + 1);
+            
+            if (index < (i - 1)) {
+                comparacoes++;
+                if (arr[index] < arr[index + 1]) {
+                    index++;
+                }
+            }
+            
+            if (index < i) {
+                comparacoes++;
+                if (arr[j] < arr[index]) {
+                    trocar(&arr[j], &arr[index]);
+                }
+            }
+            
+            j = index;
+        } while (index < i);
+    }
+    
+    return comparacoes;
+}
+
+//==============================Merge Sort Iterativo=================================
 uint64_t mergeSortSR(int vetor[], size_t tam) {
     int* aux = (int*)malloc(tam * sizeof(int));
     if (aux == NULL) {
@@ -283,7 +363,7 @@ uint64_t mergeSortSR(int vetor[], size_t tam) {
 
     uint64_t comparacoes = 0;
 
-    // inicializa a pilha com o intervalo total
+    // Primeira passagem: Divisão
     push(stack, 0);
     push(stack, tam - 1);
 
@@ -295,13 +375,20 @@ uint64_t mergeSortSR(int vetor[], size_t tam) {
         if (esq < dir) {
             int meio = esq + (dir - esq) / 2;
 
-            // empilha os intervalos direito e esquerdo
-            push(stack, meio + 1);
-            push(stack, dir);
+            // Empilha os intervalos direito e esquerdo
             push(stack, esq);
             push(stack, meio);
+            push(stack, meio + 1);
+            push(stack, dir);
+        }
+    }
 
-            // ordena o intervalo atual
+    // Segunda passagem: Mesclagem
+    for (int curr_size = 1; curr_size <= tam - 1; curr_size = 2 * curr_size) {
+        for (int esq = 0; esq < tam - 1; esq += 2 * curr_size) {
+            int meio = esq + curr_size - 1;
+            int dir = ((esq + 2 * curr_size - 1) < (tam - 1)) ? (esq + 2 * curr_size - 1) : (tam - 1);
+
             comparacoes += mergir(vetor, aux, esq, meio, dir);
         }
     }
@@ -310,6 +397,7 @@ uint64_t mergeSortSR(int vetor[], size_t tam) {
     destroi_pilha(stack);
     return comparacoes;
 }
+
 
 uint64_t mergir(int vetor[], int aux[], int esq, int meio, int dir) {
     int i, j, k;
