@@ -13,18 +13,20 @@ int main() {
     scanf("%zu", &tamVetor);
     // printf("Tamanho do vetor: %zu\n", tamVetor);
 
+    // alloca o vetor na memória 
     int* vetor = (int*)malloc(tamVetor * sizeof(int));
     if (vetor == NULL) {
         printf("Falha fatal. Impossível alocar memoria.");
         return 1;
     }
 
+    //Funções do dados do aluno
     getNome(nome);
     printf("Trabalho de %s\n", nome);
     printf("GRR %u\n", getGRR());
 
+    //prenche vetor com valores aleatórios e imprime na tela
     preencherVetorAleatorio(vetor,tamVetor);
-
     imprimeVetor(vetor, tamVetor);
     printf("\n");
 
@@ -59,7 +61,6 @@ int main() {
     printf("Tempo: %f segundos\n", total);
     printf("\n");
 
-
 //======================Heap Sort Recursivo====================================
 
     numComp = 0;
@@ -72,6 +73,9 @@ int main() {
     imprimeVetor(vetor, tamVetor);
     printf("Comparações: %d\n", numComp);
     printf("Tempo: %f segundos\n", total);
+    printf("\n");
+
+//======================Heap Sort Iterativo====================================
 
     /*printf("NumComp: %d\n", numComp);
     numComp = quickSort(vetor, 3);

@@ -76,7 +76,7 @@ void preencherVetorAleatorio(int vetor[], size_t tam) {
     srand((unsigned int)time(NULL));
     
     for (size_t i = 0; i < tam; i++) {
-        vetor[i] = rand() % (MAX_VAL + 1); // gera valores entre 0 e MAX_VAL
+        vetor[i] = rand() % tam; // gera valores entre 0 e MAX_VAL
     }
 }
 
