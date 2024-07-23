@@ -19,15 +19,12 @@ int main() {
         printf("Falha fatal. Impossível alocar memoria.");
         return 1;
     }
+    printf("\n");
 
     //Funções do dados do aluno
     getNome(nome);
     printf("Trabalho de %s\n", nome);
     printf("GRR %u\n", getGRR());
-
-    //prenche vetor com valores aleatórios e imprime na tela
-    preencherVetorAleatorio(vetor,tamVetor);
-    imprimeVetor(vetor, tamVetor);
     printf("\n");
 
     clock_t start, end;
@@ -35,6 +32,10 @@ int main() {
 
 //======================Merge Sort Recursivo====================================
 
+    //prenche vetor com valores aleatórios e imprime na tela
+    preencherVetorAleatorio(vetor,tamVetor,1,50);
+    imprimeVetor(vetor, tamVetor);
+    printf("\n");
     numComp = 0;
     start = clock();
     numComp = mergeSort(vetor, tamVetor);
@@ -49,7 +50,7 @@ int main() {
 
 //======================Merge Sort Iterativo====================================
 
-    /*preencherVetorAleatorio(vetor,tamVetor);
+    preencherVetorAleatorio(vetor,tamVetor,1,50);
     imprimeVetor(vetor, tamVetor);
     printf("\n");
     numComp = 0;
@@ -62,11 +63,11 @@ int main() {
     imprimeVetor(vetor, tamVetor);
     printf("Comparações: %d\n", numComp);
     printf("Tempo: %f segundos\n", total);
-    printf("\n");*/
+    printf("\n");
 
 //======================Quick Sort Recursivo===================================
 
-    preencherVetorAleatorio(vetor,tamVetor);
+    preencherVetorAleatorio(vetor,tamVetor,1,70);
     imprimeVetor(vetor, tamVetor);
     printf("\n");
     numComp = 0;
@@ -83,9 +84,24 @@ int main() {
 
 //======================Quick Sort Iterativo===================================
 
+    preencherVetorAleatorio(vetor,tamVetor,1,70);
+    imprimeVetor(vetor, tamVetor);
+    printf("\n");
+    numComp = 0;
+    start = clock();
+    numComp = quickSortSR(vetor, tamVetor);
+    end = clock();
+    total = ((double)(end - start)) / CLOCKS_PER_SEC;
+
+    printf("Quick Sort Iterativo\n");
+    imprimeVetor(vetor, tamVetor);
+    printf("Comparações: %d\n", numComp);
+    printf("Tempo: %f segundos\n", total);
+    printf("\n");
+
 //======================Heap Sort Recursivo====================================
 
-    preencherVetorAleatorio(vetor,tamVetor);
+    preencherVetorAleatorio(vetor,tamVetor,1,90);
     imprimeVetor(vetor, tamVetor);
     printf("\n");
     numComp = 0;
@@ -102,7 +118,7 @@ int main() {
 
 //======================Heap Sort Iterativo====================================
 
-    preencherVetorAleatorio(vetor,tamVetor);
+    preencherVetorAleatorio(vetor,tamVetor,1,90);
     imprimeVetor(vetor, tamVetor);
     printf("\n");
     numComp = 0;
